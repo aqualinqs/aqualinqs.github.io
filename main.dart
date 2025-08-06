@@ -46,15 +46,17 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: buildAppBar(context),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
-          final screenWidth = constraints.maxWidth;
-          final padding = screenWidth < 600 ? 16.0 : 80.0;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+        final screenWidth = constraints.maxWidth;
+        final isWideScreen = screenWidth > 600;
+        final padding = isWideScreen ? 80.0 : 16.0;
 
-          return Padding(
+        return Scaffold(
+          appBar: buildAppBar(context, isWideScreen),
+          endDrawer: isWideScreen ? null : buildDrawer(context),
+          body: Padding(
             padding: EdgeInsets.all(padding),
             child: Flex(
               direction: isPortrait ? Axis.vertical : Axis.horizontal,
@@ -62,7 +64,6 @@ class HomePage extends StatelessWidget {
                 Expanded(
                   child: SingleChildScrollView(
                     child: Column(
-                      mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
@@ -70,13 +71,7 @@ class HomePage extends StatelessWidget {
                           style: TextStyle(
                             fontSize: isPortrait ? 28 : 40,
                             color: Colors.cyan,
-                            shadows: [
-                              Shadow(
-                                offset: Offset(1.0, 1.0),
-                                blurRadius: 3.0,
-                                color: Colors.lightBlue,
-                              ),
-                            ],
+                            shadows: [Shadow(offset: Offset(1.0, 1.0), blurRadius: 3.0, color: Colors.lightBlue)],
                           ),
                         ),
                         Text(
@@ -85,13 +80,7 @@ class HomePage extends StatelessWidget {
                             fontSize: isPortrait ? 35 : 50,
                             fontWeight: FontWeight.bold,
                             color: Colors.cyan,
-                            shadows: [
-                              Shadow(
-                                offset: Offset(1.0, 1.0),
-                                blurRadius: 3.0,
-                                color: Colors.lightBlue,
-                              ),
-                            ],
+                            shadows: [Shadow(offset: Offset(1.0, 1.0), blurRadius: 3.0, color: Colors.lightBlue)],
                           ),
                         ),
                         Padding(
@@ -102,13 +91,7 @@ class HomePage extends StatelessWidget {
                               fontSize: isPortrait ? 16 : 20,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
-                              shadows: [
-                                Shadow(
-                                  offset: Offset(1.0, 1.0),
-                                  blurRadius: 1.0,
-                                  color: Colors.white24,
-                                ),
-                              ],
+                              shadows: [Shadow(offset: Offset(1.0, 1.0), blurRadius: 1.0, color: Colors.white24)],
                             ),
                           ),
                         ),
@@ -116,10 +99,7 @@ class HomePage extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           child: Text(
                             'Passionate about making sustainable impacts worldwide through technology, design and systems thinking. Proficient in SQL, Python, Excel, STATA, Power BI, Tableau, Cloud Computing, GIS, HTML, Flutter, Django, Figma, MIS & CRM systems. Looking for a BI Analyst who can transform your "UGH-OH!" INTO WOW-AHA!',
-                            style: TextStyle(
-                              fontSize: isPortrait ? 13 : 15,
-                              color: Colors.white,
-                            ),
+                            style: TextStyle(fontSize: isPortrait ? 13 : 15, color: Colors.white),
                           ),
                         ),
                         Padding(
@@ -129,13 +109,7 @@ class HomePage extends StatelessWidget {
                             style: TextStyle(
                               fontSize: isPortrait ? 13 : 15,
                               color: Colors.white,
-                              shadows: [
-                                Shadow(
-                                  offset: Offset(1.0, 1.0),
-                                  blurRadius: 3.0,
-                                  color: Colors.white10,
-                                ),
-                              ],
+                              shadows: [Shadow(offset: Offset(1.0, 1.0), blurRadius: 3.0, color: Colors.white10)],
                             ),
                           ),
                         ),
@@ -157,13 +131,7 @@ class HomePage extends StatelessWidget {
                             style: TextStyle(
                               fontSize: isPortrait ? 13 : 15,
                               color: Colors.white,
-                              shadows: [
-                                Shadow(
-                                  offset: Offset(1.0, 1.0),
-                                  blurRadius: 3.0,
-                                  color: Colors.white10,
-                                ),
-                              ],
+                              shadows: [Shadow(offset: Offset(1.0, 1.0), blurRadius: 3.0, color: Colors.white10)],
                             ),
                           ),
                         ),
@@ -171,10 +139,7 @@ class HomePage extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: IconButton(
-                              icon: const Icon(Icons.keyboard_arrow_down_rounded,
-                                color: Colors.white,
-                                size: 40,
-                              ),
+                              icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Colors.white, size: 40),
                               onPressed: () {
                                 Navigator.pushNamed(context, '/');
                               },
@@ -185,82 +150,81 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (!isPortrait)
+                if (!isPortrait && isWideScreen)
                   const ProfileImage(),
               ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
-  AppBar buildAppBar(BuildContext context) {
+  AppBar buildAppBar(BuildContext context, bool isWideScreen) {
     return AppBar(
       title: Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/');
-          },
+          onPressed: () => Navigator.pushNamed(context, '/'),
           child: const Text(
             "S'Tech Portfolio",
             style: TextStyle(
-              shadows: [
-                Shadow(
-                  offset: Offset(1.0, 1.0),
-                  blurRadius: 3.0,
-                  color: Colors.blueGrey,
-                ),
-              ],
               fontSize: 20,
               color: Colors.blueAccent,
+              shadows: [Shadow(offset: Offset(1.0, 1.0), blurRadius: 3.0, color: Colors.blueGrey)],
             ),
           ),
         ),
       ),
-      actions: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/tech_journey');
-            },
-            child: const Text('Tech Journey', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueAccent)),
+      actions: isWideScreen
+          ? [
+              _navButton(context, '/tech_journey', 'Tech Journey'),
+              _navButton(context, '/projects', 'Projects'),
+              _navButton(context, '/profile', 'Profile'),
+              _navButton(context, '/connect', 'Connect'),
+            ]
+          : null,
+    );
+  }
+
+  Widget _navButton(BuildContext context, String route, String label) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextButton(
+        onPressed: () => Navigator.pushNamed(context, route),
+        child: Text(label, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.blueAccent)),
+      ),
+    );
+  }
+
+  Drawer buildDrawer(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          const DrawerHeader(
+            decoration: BoxDecoration(color: Colors.deepPurpleAccent),
+            child: Text("Navigation", style: TextStyle(color: Colors.white, fontSize: 24)),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/projects');
-            },
-            child: const Text('Projects', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueAccent)),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/profile');
-            },
-            child: const Text('Profile', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueAccent)),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/connect');
-            },
-            child: const Text('Connect', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueAccent)),
-          ),
-        ),
-      ],
+          _drawerItem(context, '/tech_journey', 'Tech Journey'),
+          _drawerItem(context, '/projects', 'Projects'),
+          _drawerItem(context, '/profile', 'Profile'),
+          _drawerItem(context, '/connect', 'Connect'),
+        ],
+      ),
+    );
+  }
+
+  ListTile _drawerItem(BuildContext context, String route, String title) {
+    return ListTile(
+      title: Text(title),
+      onTap: () {
+        Navigator.pop(context); // close the drawer
+        Navigator.pushNamed(context, route);
+      },
     );
   }
 }
-
 class ProfileImage extends StatelessWidget {
   const ProfileImage({super.key});
 
